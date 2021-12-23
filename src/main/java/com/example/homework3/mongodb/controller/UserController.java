@@ -1,15 +1,10 @@
 package com.example.homework3.mongodb.controller;
 
-import com.example.homework3.mongodb.dto.ProductDetailDto;
-import com.example.homework3.mongodb.entity.Product;
-import com.example.homework3.mongodb.entity.User;
-import com.example.homework3.mongodb.service.UserService;
+import com.example.homework3.mongodb.dto.UserDto;
+import com.example.homework3.mongodb.entityservice.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,38 +14,29 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserEntityService userEntityService;
 
     @GetMapping("")
-    public MappingJacksonValue findAllUserList() {
-
-        List<User> userList = userService.findAll();
-
-        MappingJacksonValue mapping = new MappingJacksonValue(userList);
-
-        return mapping;
-
+    public List<UserDto> findAllUserList() {
+        List<UserDto> userDtoList = userEntityService.findAll();
+        return userDtoList;
     }
 
     @GetMapping("{id}")
-    public MappingJacksonValue findUserById(@PathVariable String id){
-
-        User user = userService.findById(id);
-
-        MappingJacksonValue mapping = new MappingJacksonValue(user);
-
-        return mapping;
-
+    public UserDto findUserById(@PathVariable String id){
+        return userEntityService.findById(id);
     }
 
     @PostMapping("")
-    public ResponseEntity<Object> saveUser(/**@Valid*/@RequestBody User user){
-        user = userService.save(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userEntityService.save(userDto));
     }
 
     @DeleteMapping("{id}")
-    public void deleteUser(@PathVariable String id){
-        userService.deleteById(id);
+    public void delete(@PathVariable String id){
+        userEntityService.deleteById(id);
     }
+
+    //TODO: VALİD ANATASYONU EKLENECE VE ONA GÖRE ROW CHECK YAPILCAK EX. YORUM SATIRI MAKS 500 OLCAK
+    //TODO: EXCEPTİON HANDLİINGLER EKLENCEK
 }

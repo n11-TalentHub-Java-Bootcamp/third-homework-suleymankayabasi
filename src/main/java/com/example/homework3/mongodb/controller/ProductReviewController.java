@@ -1,11 +1,11 @@
 package com.example.homework3.mongodb.controller;
 
-import com.example.homework3.mongodb.entity.ProductReview;
-import com.example.homework3.mongodb.service.ProductReviewService;
+import com.example.homework3.mongodb.dto.ProductReviewDto;
+import com.example.homework3.mongodb.dto.UserDto;
+import com.example.homework3.mongodb.entityservice.ProductReviewEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,38 +15,26 @@ import java.util.List;
 public class ProductReviewController {
 
     @Autowired
-    private ProductReviewService productReviewService;
+    private ProductReviewEntityService productReviewEntityService;
 
     @GetMapping("")
-    public MappingJacksonValue findAllUserList() {
-
-        List<ProductReview> productReviewList = productReviewService.findAll();
-
-        MappingJacksonValue mapping = new MappingJacksonValue(productReviewList);
-
-        return mapping;
-
+    public List<ProductReviewDto> findAllUserList() {
+        List<ProductReviewDto> productReviewDtoList = productReviewEntityService.findAll();
+        return productReviewDtoList;
     }
 
     @GetMapping("{id}")
-    public MappingJacksonValue findUserById(@PathVariable String id){
-
-        ProductReview productReview = productReviewService.findById(id);
-
-        MappingJacksonValue mapping = new MappingJacksonValue(productReview);
-
-        return mapping;
-
+    public ProductReviewDto findUserById(@PathVariable String id){
+        return productReviewEntityService.findById(id);
     }
 
     @PostMapping("")
-    public ResponseEntity<Object> saveUser(/**@Valid*/@RequestBody ProductReview productReview){
-        productReview = productReviewService.save(productReview);
-        return new ResponseEntity<>(productReview, HttpStatus.CREATED);
+    public ResponseEntity<ProductReviewDto> saveUser(@RequestBody ProductReviewDto productReviewDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(productReviewEntityService.save(productReviewDto));
     }
 
     @DeleteMapping("{id}")
-    public void deleteUser(@PathVariable String id){
-        productReviewService.deleteById(id);
+    public void delete(@PathVariable String id){
+        productReviewEntityService.deleteById(id);
     }
 }
