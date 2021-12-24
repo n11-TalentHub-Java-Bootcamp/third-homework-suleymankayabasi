@@ -38,6 +38,4 @@ public class UserController {
         userService.deleteById(id);
     }
 
-    //TODO: VALİD ANATASYONU EKLENECE VE ONA GÖRE ROW CHECK YAPILCAK EX. YORUM SATIRI MAKS 500 OLCAK
-
 }
