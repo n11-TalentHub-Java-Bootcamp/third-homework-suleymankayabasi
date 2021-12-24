@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Data
@@ -18,6 +19,7 @@ public class ProductReview {
 
     @Id
     private String id;
+    @Size(max = 500,message = "Character Size Limit Exceeded.")
     private String productReview;
     private Date reviewDate;
     private String productId;

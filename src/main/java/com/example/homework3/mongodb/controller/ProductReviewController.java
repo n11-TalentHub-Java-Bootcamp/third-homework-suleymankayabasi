@@ -1,13 +1,13 @@
 package com.example.homework3.mongodb.controller;
 
 import com.example.homework3.mongodb.dto.ProductReviewDto;
-import com.example.homework3.mongodb.dto.UserDto;
-import com.example.homework3.mongodb.entityservice.ProductReviewEntityService;
+import com.example.homework3.mongodb.service.IProductReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,26 +15,26 @@ import java.util.List;
 public class ProductReviewController {
 
     @Autowired
-    private ProductReviewEntityService productReviewEntityService;
+    private IProductReviewService productReviewService;
 
     @GetMapping("")
     public List<ProductReviewDto> findAllUserList() {
-        List<ProductReviewDto> productReviewDtoList = productReviewEntityService.findAll();
+        List<ProductReviewDto> productReviewDtoList = productReviewService.findAll();
         return productReviewDtoList;
     }
 
     @GetMapping("{id}")
     public ProductReviewDto findUserById(@PathVariable String id){
-        return productReviewEntityService.findById(id);
+        return productReviewService.findById(id);
     }
 
     @PostMapping("")
-    public ResponseEntity<ProductReviewDto> saveUser(@RequestBody ProductReviewDto productReviewDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productReviewEntityService.save(productReviewDto));
+    public ResponseEntity<ProductReviewDto> saveUser(@RequestBody @Valid ProductReviewDto productReviewDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(productReviewService.save(productReviewDto));
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable String id){
-        productReviewEntityService.deleteById(id);
+        productReviewService.deleteById(id);
     }
 }
